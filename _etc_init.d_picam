@@ -1,0 +1,38 @@
+#! /bin/sh
+# /etc/init.d/picam
+#
+
+### BEGIN INIT INFO
+# Provides: picam
+# Required-Start: apache2
+# Required-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6 
+# Short-Description: stream picam on port 6666
+# Description:
+### END INIT INFO
+
+# Some things that run always
+#touch /var/lock/blah
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    echo "Starting picam..."
+    raspivid -vf -hf -t 0 -w 960 -h 540 -fps 25 -b 500000 -o - | /usr/local/bin/ffmpeg -i - -vcodec copy -an -f flv -metadata streamName=myStream tcp://0.0.0.0:6666 > /home/pi/picam.log 2>&1 &
+    /usr/bin/python2.7 /home/pi/work/hello-web-py/rest.py 8081 > /home/pi/rest_led.log 2>&1 &
+    echo "picam started"
+    ;;
+  stop)
+    echo "Stopping picam..."
+    pkill python2.7
+    pkill raspivid
+    echo "picam stopped"
+    ;;
+  *)
+    echo "Usage: /etc/init.d/picam {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
