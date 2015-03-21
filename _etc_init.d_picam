@@ -19,13 +19,20 @@
 case "$1" in
   start)
     echo "Starting picam..."
-    raspivid -vf -hf -t 0 -w 960 -h 540 -fps 25 -b 500000 -o - | /usr/local/bin/ffmpeg -i - -vcodec copy -an -f flv -metadata streamName=myStream tcp://0.0.0.0:6666 > /home/pi/picam.log 2>&1 &
-    /usr/bin/python2.7 /home/pi/work/hello-web-py/rest.py 8081 > /home/pi/rest_led.log 2>&1 &
+    raspivid -vf -hf -t 0 -w 960 -h 540 -fps 25 -b 500000 -o - | /usr/local/bin/ffmpeg -i - -vcodec copy -an -f flv -metadata streamName=myStream tcp://0.0.0.0:6666 > /opt/netbot/picam.log 2>&1 &
     echo "picam started"
+
+    echo "Starting server..."
+    cd /opt/netbot
+    /usr/bin/python2.7 /opt/netbot/server.py 8081 > /opt/netbot/server.log 2>&1 &
+    echo "server started"
     ;;
   stop)
-    echo "Stopping picam..."
+    echo "Stopping server..."
     pkill python2.7
+    echo "server stopped"
+
+    echo "Stopping picam..."
     pkill raspivid
     echo "picam stopped"
     ;;
