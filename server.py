@@ -8,23 +8,22 @@ led = 18
 render = web.template.render('templates/')
         
 urls = (
-    '/netbot', 'netbot',
-    '/(.*)', 'hello'
+    '/led', 'blink',
+    '/', 'index'
 )
 app = web.application(urls, globals())
 
-class hello:        
-    def GET(self, name):
-	if not name:
-            GPIO.setup(led, GPIO.OUT)
-            GPIO.output(led, 1)
-            time.sleep(5)
-            GPIO.output(led, 0)
-            GPIO.cleanup()
+class blink:        
+    def GET(self):
+        GPIO.setup(led, GPIO.OUT)
+        GPIO.output(led, 1)
+        time.sleep(1)
+        GPIO.output(led, 0)
+        GPIO.cleanup()
 
         return 'LED Working!'
 
-class netbot:
+class index:
     def GET(self):
         return render.netbot()
 
