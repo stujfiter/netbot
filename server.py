@@ -9,7 +9,7 @@ render = web.template.render('templates/')
         
 urls = (
     '/led', 'blink',
-    '/', 'index'
+    '/(.*)', 'index'
 )
 app = web.application(urls, globals())
 
@@ -24,8 +24,15 @@ class blink:
         return 'LED Working!'
 
 class index:
-    def GET(self):
-        return render.netbot()
+    def GET(self, passwd):
+        f = open("secret")
+        secret = f.readline().strip()
+        f.close()
+
+        if passwd == secret:
+            return render.netbot()
+        else:
+            return render.denied()
 
 if __name__ == "__main__":
     app.run()
