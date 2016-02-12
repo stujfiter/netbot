@@ -1,14 +1,16 @@
 import web
 import RPi.GPIO as GPIO
 import time
+from index import index
 
 GPIO.setmode(GPIO.BCM)
 led = 18
 
 render = web.template.render('templates/')
-        
+
 urls = (
     '/led', 'blink',
+    '/', 'home',
     '/(.*)', 'index'
 )
 app = web.application(urls, globals())
@@ -21,18 +23,8 @@ class blink:
         GPIO.output(led, 0)
         GPIO.cleanup()
 
+        web.header('cache-control', 'private, max-age=0, no-cache', unique=True)
         return 'LED Working!'
-
-class index:
-    def GET(self, passwd):
-        f = open("secret")
-        secret = f.readline().strip()
-        f.close()
-
-        if passwd == secret:
-            return render.netbot()
-        else:
-            return render.denied()
 
 if __name__ == "__main__":
     app.run()
