@@ -9,6 +9,6 @@ class index:
         f.close()
 
         if passwd == secret:
-            return render.netbot()
+            return render.novideo()
         else:
             return render.denied()

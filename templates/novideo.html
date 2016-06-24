@@ -1,0 +1,47 @@
+$def with()
+
+<html>
+  <head>
+    <title>domoroboto</title>
+    <script type="text/javascript" src="static/js/jquery-2.0.0.min.js"></script>
+  </head>
+  <body>
+    <button id="forward">Forward</button>
+    <button id="reverse">Reverse</button>
+    <button id="right">Right</button>
+    <button id="left">Left</button>
+
+<script type="text/javascript">
+    jQuery('#forward').click(function(){ 
+         jQuery.ajax({ 
+             type: "GET",
+             dataType: "text",
+             url: "http://172.20.10.5:8081/forward"
+         });
+    });
+    jQuery('#reverse').click(function(){ 
+         jQuery.ajax({ 
+             type: "GET",
+             dataType: "text",
+             url: "http://172.20.10.5:8081/reverse"
+         });
+    });
+    jQuery('#right').click(function(){ 
+         jQuery.ajax({ 
+             type: "GET",
+             dataType: "text",
+             url: "http://172.20.10.5:8081/right"
+         });
+    });
+    jQuery('#left').click(function(){ 
+         jQuery.ajax({ 
+             type: "GET",
+             dataType: "text",
+             url: "http://172.20.10.5:8081/left"
+         });
+    });
+
+</script>
+
+  </body>
+</html>
